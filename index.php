@@ -1,44 +1,131 @@
 <?php
+
 require 'flight/Flight.php';
-include 'model/BddManager.php';
-include 'model/Connexion.php';
-include 'model/User.php';
-include 'model/UserRepository.php';
+require 'Autoloader.php';
+
+session_start();
 
 Flight::render('header', array('heading' => 'Hello'), 'header');
 Flight::render('footer', array('test' => 'World'), 'footer');
 
 Flight::route('/', function(){
-    echo 'hello world!';
+
+    if(empty($_SESSION['user'])){
+        Flight::redirect('login');
+
+    }
+    else{
+
+        Flight::redirect('accueil');
+    }
+
 });
 
 Flight::route('/login',  function(){
-    // Ceci est la fonction pour faire un display de 'login'. Par défaut, il va chercher dans 'views'.
+    
     Flight::render('login', array(
     ));
+
 });
 
-Flight::route('POST /newProductService', function(){
-    // var_dump($_POST);
-    $request = Flight::request()->data['nom'];
-    $description = Flight::request()->data['description'];
-    $couleur = Flight::request()->data['couleur'];
+Flight::route('POST /loginService', function(){
 
-    var_dump($request);
-    var_dump($description);
-    var_dump($couleur);
+    $array = array(
+        'username' => $_POST['username'],
+        'password' => $_POST['password']
+    );
+
+    $bdd = new BddManager();
+    $repo = $bdd->getUserRepository();
+    $loginService = new User();
+    $loginService->setParams($array);
+    $checkUser = $loginService->checkUserLogin($bdd);
+
+    if($checkUser == true){
+
+        $_SESSION['user'] = $loginService;
+        Flight::redirect('accueil');
+
+    }
+    else{
+        Flight::redirect('login?log=failed');
+    }
+
 });
 
-// Flight::route('/produit/@produit/@promotion', function($id, $name){
-    // Ceci au lieu de faire des GET
-//     echo $id;
-//     echo $name;
-// });
+Flight::route('/register',  function(){
+    
+    Flight::render('register', array(
+    ));
 
-// On peut combiner l'url avec les regex
-// Flight::route('/detail/@id:[0-9]{3}', function($id){
-//    echo "il y a un détail du produit avec l'id " . $id;
-// });
+});
+
+Flight::route('POST /RegisterService', function(){
+
+    $array = array(
+        'username' => $_POST['username'],
+        'mail' => $_POST['email'],
+        'password' => $_POST['password'],
+        'cpassword' => $_POST['cpassword']
+    );
+
+    $bdd = new BddManager();
+    $repo = $bdd->getUserRepository();
+    $userRegis = new User();
+    $userRegis->setParams($array);
+    $registerService = new RegisterService();
+    $registerService->setParams($array);
+    $controls = $registerService->Controls();
+
+
+    if(empty($userRegis->error) && $userRegis->usernameRegisterExist($bdd) == false && $controls == true){
+
+        $userRegis->insertRegister($bdd);
+
+        if(($userRegis->checkInsertRegister($bdd)) == true){
+
+            $_SESSION['user'] = $userRegis;
+            Flight::redirect('accueil');
+
+        }
+        else{
+
+            Flight::redirect('?error=InInsert');
+
+        }
+
+    }
+    else{
+
+        Flight::redirect('register?signup=failed');
+
+    }
+
+});
+
+Flight::route('/accueil',  function(){
+    
+    Flight::render('accueil', array(
+    ));
+
+});
+
+Flight::route('/post',  function(){
+    
+    Flight::render('post', array(
+    ));
+
+});
+
+Flight::route('/disconnect',  function(){
+    
+    $user = new Disconnect();
+    $user->disconnexion();
+
+    Flight::render('login', array(
+    ));
+
+});
 
 Flight::start();
 ?>

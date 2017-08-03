@@ -17,7 +17,7 @@ class BddManager{
 
         $this->connexion = Connexion::getConnexion();
 
-        $this->setVoitureRepository(new UserRepository($this->connexion));
+        $this->setUserRepository(new UserRepository($this->connexion));
 
     }
 

@@ -1,28 +1,31 @@
+<?php
+    if(!empty($_SESSION['user'])){
+        header("location: index.php");
+    }
+?>
+
+
 <?= $header ?>
 
-<h2>Login</h2>
-<p>
-    Connectez-vous
-</p>
-<form action="newProductService" method="post">
-    <div class="form-group">
-        <label>Produit</label>
-        <input class="form-control" type="text" name="nom" value=""/>
-    </div>
-    <div class="form-group">
-        <label>description</label>
-        <textarea name="description" class="form-control"></textarea>
-    </div>
-    <div class="form-group">
-        <label>Prix</label>
-        <input class="form-control" type="text" name="prix" value="" />
-    </div>
-    <div class="form-group">
-        <label>Couleur</label>
-        <input class="form-control" type="text" name="couleur" value="" />
-    </div>
 
-    <button class="btn btn-primary" type="submit">Poster nouveau Produit</button>
+<h2>Login</h2>
+
+<form action="loginService" method="post">
+    <div>
+        <label>Username</label><br>
+        <input type="text" name="username"/><br><br>
+    </div>
+    <div>
+        <label>Password</label><br>
+        <input type="text" name="password"/><br><br>
+    </div>
+    <input type="submit" value="Log in">
+    <br><br>
+    <div>
+        <p>No account? <a href="register">Create</a> one now!<p>
+        <br><br>
+        <p><a href="accueil">Continue</a> without account<p>
+    </div>
 
 </form>
 
