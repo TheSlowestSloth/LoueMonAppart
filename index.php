@@ -5,6 +5,10 @@ require 'Autoloader.php';
 
 session_start();
 
+/**
+ * Alfonso: Bon t'es bien parti toi aussi. Continue
+ */
+
 Flight::render('header', array('heading' => 'Hello'), 'header');
 Flight::render('footer', array('test' => 'World'), 'footer');
 
@@ -77,7 +81,9 @@ Flight::route('POST /RegisterService', function(){
     $registerService->setParams($array);
     $controls = $registerService->Controls();
 
-
+    /**
+     * Alfonso: utilise le getter pour avoir accès aux erreurs!
+     */
     if(empty($userRegis->error) && $userRegis->usernameRegisterExist($bdd) == false && $controls == true){
 
         $userRegis->insertRegister($bdd);
