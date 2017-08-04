@@ -23,11 +23,33 @@ class RegisterService{
 
     public function Controls(){
 
-        if($this->usernameControls() == false || $this->passwordControls() == false || $this->emailControls() == false){
-            return false;
+        $this->setError(array(
+            'username' => '',
+            'email' => '',
+            'password' => '',
+            'cpassword' => ''
+        ));
+
+        /* J'utilise le $flag plutôt que des return pour obliger
+        le programme à lire tout les if (plutôt que de l'arrêter 
+        au premier) et ainsi obtenir toute les erreurs */
+
+        $flag = true;
+
+        if($this->usernameControls() == false){
+            $flag = false;
+        }
+        if($this->passwordControls() == false){
+            $flag = false;
+        }
+        if($this->emailControls() == false){
+            $flag = false;
+        }
+        if($flag == true){
+            return true;
         }
         else{
-            return true;
+            return false;
         }
         
     }

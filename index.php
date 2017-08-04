@@ -96,13 +96,15 @@ Flight::route('POST /RegisterService', function(){
         }
         else{
 
-            Flight::redirect('?error=InInsert');
+            $_SESSION['error'] = $registerService->getError();
+            Flight::redirect('register?signup=failed');
 
         }
 
     }
     else{
 
+        $_SESSION['error'] = $registerService->getError();
         Flight::redirect('register?signup=failed');
 
     }
@@ -120,6 +122,47 @@ Flight::route('/post',  function(){
     
     Flight::render('post', array(
     ));
+
+    if(empty($_SESSION['user'])){
+        Flight::redirect('login');
+    }
+
+});
+
+Flight::route('POST /postService',  function(){
+    
+    $bdd = new BddManager();
+    $img1 = $_FILES['uploadedfile1'];
+    $img2 = $_FILES['uploadedfile2'];
+    $img3 = $_FILES['uploadedfile3'];
+    $postService = new PostService();
+    $check = $postService->checkPostForm();
+
+    if($check == false){
+        Flight::redirect('post?form=failed');
+    }
+
+    $url1 = $postService->dlFiles($img1);
+    $url2 = $postService->dlFiles($img2);
+    $url3 = $postService->dlFiles($img3);
+    
+    $array = array(
+        'username' => $_SESSION['user']->getParams()['username'],
+        'type' => $_POST['type'],
+        'size' => $_POST['taille'],
+        'groundsize' => $_POST['taille2'],
+        'dispo' => $_POST['date'],
+        'description' => $_POST['description'],
+        'price' => $_POST['prix'],
+        'photo1' => $url1,
+        'photo2' => $url2,
+        'photo3' => $url3
+    );
+
+    $logement = new Logement();
+    $logement->setParams($array);
+    $logement->insertLocation($bdd);
+    Flight::redirect('post');
 
 });
 

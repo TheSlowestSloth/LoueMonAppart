@@ -20,7 +20,11 @@ class Logement{
     public function setError($error){
         $this->error = $error;
     }
-    
+
+    public function insertLocation(BddManager $bddmanager){
+        $bddmanager->getLogementRepository()->insertLogement($this);
+    }
+
 }
 
 ?>

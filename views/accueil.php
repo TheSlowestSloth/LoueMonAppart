@@ -11,7 +11,12 @@
 ?>
 
 <h1>Accueil<h1><br>
-<a href="post">Post</a>
+<?php
+    if(!empty($_SESSION['user'])){
+        echo "<a href='post'>Post</a>";
+    }
+?>
+
 
 
 <?= $footer ?>
