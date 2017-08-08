@@ -1,0 +1,8 @@
+/*****
+*
+* Alfonso: Bravo pour avoir compris autant de chose tout en lisant tes mangas
+* Tu peux réorganiser tes dossier objet si tu le souhaite il va falloir modifier ton autoloader
+* Tu as bien saisi la logique objet.
+*
+* Je pense que tu bien bien réussir dans ce métier. Je ne me fais pas de soucis pour toi
+* Bonne chance pour la suite et à bientôt j'espère.
